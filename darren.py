@@ -57,7 +57,7 @@ def compute_eme(image, block_size=(8, 8)):
 
 # pipeline for each image 
 for filename in image_files:
-    path = f"{filename}"
+    path = f"original images/{filename}"
     rgb, gray = load_grayscale_and_color(path)
 
     emes = []
