@@ -69,8 +69,8 @@ def compute_Visibility(img, k1=8, k2=8):
             maxVal = np.max(block)
             
             # prevent log(0), log(negative), or log(overflow)
-            maxVal = np.clip(maxVal, -1e8, 1e8)
-            minVal = np.clip(minVal, -1e8, 1e8)
+            maxVal = np.clip(maxVal, 0, 255)
+            minVal = np.clip(minVal, 0, 255)
             
             total = maxVal + minVal
             
@@ -101,8 +101,8 @@ def compute_AME(img, k1=8, k2=8):
             maxVal = np.max(block)
             
             # prevent log(0), log(negative), or log(overflow)
-            maxVal = np.clip(maxVal, -1e8, 1e8)
-            minVal = np.clip(minVal, -1e8, 1e8)
+            maxVal = np.clip(maxVal, 0, 255)
+            minVal = np.clip(minVal, 0, 255)
             
             total = maxVal + minVal
             
@@ -134,8 +134,8 @@ def compute_AMEE(img, k1=8, k2=8, alpha=1):
             maxVal = np.max(block)
             
             # prevent log(0), log(negative), or log(overflow)
-            maxVal = np.clip(maxVal, -1e8, 1e8)
-            minVal = np.clip(minVal, -1e8, 1e8)
+            maxVal = np.clip(maxVal, 0, 255)
+            minVal = np.clip(minVal, 0, 255)
             
             total = maxVal + minVal
             
