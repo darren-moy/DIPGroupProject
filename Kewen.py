@@ -18,11 +18,19 @@ def compute_EME(img, k1=8, k2=8):
             colEnd = (l + 1) * blockCols
             
             block = img[rowStart:rowEnd, colStart:colEnd]
+            
+            # Get I_Min and I_Max
             minVal = np.min(block)
             maxVal = np.max(block)
+            
+            # Prevent overflow
+            maxVal = np.clip(maxVal, 0, 255)
+            minVal = np.clip(minVal, 0, 255)
+            
+            # Avoid Division by 0
             if minVal == 0:
                 continue
-            eme += 20 * np.log10(maxVal / minVal)
+            eme += 20 * np.log(maxVal / minVal)
     
     return eme / (k1 * k2)
 
@@ -42,8 +50,16 @@ def compute_EMEE(img, k1=8, k2=8, alpha=1):
             colEnd = (l + 1) * blockCols
 
             block = img[rowStart:rowEnd, colStart:colEnd]
+            
+            # Get I_Min and I_Max
             minVal = np.min(block)
             maxVal = np.max(block)
+            
+            # Prevent overflow
+            maxVal = np.clip(maxVal, 0, 255)
+            minVal = np.clip(minVal, 0, 255)
+            
+            # Avoid Division by 0
             if minVal == 0:
                 continue
             emee += alpha * np.log(maxVal / minVal)
@@ -65,15 +81,18 @@ def compute_Visibility(img, k1=8, k2=8):
             colEnd = (l + 1) * blockCols
 
             block = img[rowStart:rowEnd, colStart:colEnd]
+            
+            # Get I_Min and I_Max
             minVal = np.min(block)
             maxVal = np.max(block)
             
-            # prevent log(0), log(negative), or log(overflow)
+            # Prevent overflow
             maxVal = np.clip(maxVal, 0, 255)
             minVal = np.clip(minVal, 0, 255)
             
             total = maxVal + minVal
             
+            # Avoid Division by 0
             if total == 0:
                 continue
             
@@ -97,20 +116,22 @@ def compute_AME(img, k1=8, k2=8):
             colEnd = (l + 1) * blockCols
 
             block = img[rowStart:rowEnd, colStart:colEnd]
+            
+            # Get I_Min and I_Max
             minVal = np.min(block)
             maxVal = np.max(block)
             
-            # prevent log(0), log(negative), or log(overflow)
+            # Prevent overflow
             maxVal = np.clip(maxVal, 0, 255)
             minVal = np.clip(minVal, 0, 255)
             
             total = maxVal + minVal
             
+            # Avoid Division by 0
             if total == 0:
                 continue
             
             ratio = (maxVal - minVal) / total
-
             ame += np.log(ratio)
     
     return -ame / (k1 * k2)
@@ -130,20 +151,22 @@ def compute_AMEE(img, k1=8, k2=8, alpha=1):
             colEnd = (l + 1) * blockCols
 
             block = img[rowStart:rowEnd, colStart:colEnd]
+            
+            # Get I_Min and I_Max
             minVal = np.min(block)
             maxVal = np.max(block)
             
-            # prevent log(0), log(negative), or log(overflow)
+            # Prevent overflow
             maxVal = np.clip(maxVal, 0, 255)
             minVal = np.clip(minVal, 0, 255)
             
             total = maxVal + minVal
             
+            # Avoid Division by 0
             if total == 0:
                 continue
             
             ratio = (maxVal - minVal) / total
-            
             amee += np.log(ratio**alpha)
     
     return -amee / (k1 * k2)
@@ -167,13 +190,13 @@ if __name__ == "__main__":
         path = f"Original_Images/{filename}"
         rgb, gray = load_grayscale_and_color(path)
     
-        # Get precomputed optimal threshold and EME
+        # Get precomputed optimal threshold and EME (from Student 1)
         best_t, best_eme = optimal_thresholds[filename]
     
         # Student 2's processing
         enhanced_img = student2_pipeline(rgb, best_t)
         
-        # Compute metrics
+        # Compute metrics (Student 3)
         original_metrics = {
             "EME": compute_EME(gray),
             "EMEE": compute_EMEE(gray),
@@ -190,7 +213,7 @@ if __name__ == "__main__":
             "AMEE": compute_AMEE(enhanced_img)
         }
     
-        # Report metrics in a table
+        # Print metrics in a table
         print(f"\n--- {filename} ---\n")
         print(f"{'Metric':<15} {'Original':<15} {'Enhanced':<15}")
         print("-" * 45) 
