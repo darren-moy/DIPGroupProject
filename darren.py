@@ -30,7 +30,7 @@ def piecewise_linear_stretch(image, t, L_min=0, L_max=255):
         result[mask1] = L_min
 
     if t != I_max:
-        result[mask2] = ((img[mask2] - t) * (L_max - t) / (I_max - t)) + t
+        result[mask2] = ((img[mask2] - t + 1) * (L_max - t + 1) / (I_max - t + 1)) + t + 1
     else:
         result[mask2] = L_max
 
@@ -55,47 +55,48 @@ def compute_eme(image, block_size=(8, 8)):
 
     return eme_sum / count if count else 0
 
-# pipeline for each image
-for filename in image_files:
-    path = f"Original_Images/{filename}"
-    rgb, gray = load_grayscale_and_color(path)
-
-    emes = []
-    thresholds = list(range(0, 256))
-
-    for t in thresholds:
-        stretched = piecewise_linear_stretch(gray, t)
-        eme = compute_eme(stretched)
-        emes.append(eme)
-
-    best_t = thresholds[np.argmax(emes)]
-    best_eme = max(emes)
-    best_image = piecewise_linear_stretch(gray, best_t)
-
-    # compare color and new image
-    plt.figure(figsize=(10, 4))
-    plt.subplot(1, 2, 1)
-    plt.imshow(rgb)  # original RGB image
-    plt.title(f'Original (Color): {filename}')
-    plt.axis('off')
-
-    plt.subplot(1, 2, 2)
-    plt.imshow(best_image, cmap='gray')
-    plt.title(f'Enhanced (t={best_t})')
-    plt.axis('off')
-    plt.tight_layout()
-    plt.show()
-
-    # plot EME curve
-    plt.figure(figsize=(8, 4))
-    plt.plot(thresholds, emes, label='EME(t)')
-    plt.axvline(best_t, color='r', linestyle='--', label=f'Optimal t = {best_t}')
-    plt.title(f'EME vs t — {filename}')
-    plt.xlabel('Threshold t')
-    plt.ylabel('EME')
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
-
-    print(f">>> {filename}: Optimal Threshold = {best_t}, Max EME = {round(best_eme, 2)}\n")
+if __name__ == "__main__":
+    # pipeline for each image
+    for filename in image_files:
+        path = f"Original_Images/{filename}"
+        rgb, gray = load_grayscale_and_color(path)
+    
+        emes = []
+        thresholds = list(range(0, 256))
+    
+        for t in thresholds:
+            stretched = piecewise_linear_stretch(gray, t)
+            eme = compute_eme(stretched)
+            emes.append(eme)
+    
+        best_t = thresholds[np.argmax(emes)]
+        best_eme = max(emes)
+        best_image = piecewise_linear_stretch(gray, best_t)
+    
+        # compare color and new image
+        plt.figure(figsize=(10, 4))
+        plt.subplot(1, 2, 1)
+        plt.imshow(rgb)  # original RGB image
+        plt.title(f'Original (Color): {filename}')
+        plt.axis('off')
+    
+        plt.subplot(1, 2, 2)
+        plt.imshow(best_image, cmap='gray')
+        plt.title(f'Enhanced (t={best_t})')
+        plt.axis('off')
+        plt.tight_layout()
+        plt.show()
+    
+        # plot EME curve
+        plt.figure(figsize=(8, 4))
+        plt.plot(thresholds, emes, label='EME(t)')
+        plt.axvline(best_t, color='r', linestyle='--', label=f'Optimal t = {best_t}')
+        plt.title(f'EME vs t — {filename}')
+        plt.xlabel('Threshold t')
+        plt.ylabel('EME')
+        plt.legend()
+        plt.grid(True)
+        plt.tight_layout()
+        plt.show()
+    
+        print(f">>> {filename}: Optimal Threshold = {best_t}, Max EME = {round(best_eme, 2)}\n")

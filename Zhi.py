@@ -51,49 +51,49 @@ def student2_pipeline(rgb_img, optimal_t):
 
     return final_img
 
-
-# Precomputed optimal thresholds and EMEs (from Student 1)
-optimal_thresholds = {
-    "cataract1.jpeg": (0, 2.71),
-    "dry1.jpeg": (0, 5.51),
-    "hyper1.jpeg": (231, 6.65),
-    "mild1.jpeg": (0, 6.07),
-    "moderate1.jpeg": (0, 4.48),
-    "norm1.jpeg": (0, 10.96),
-    "patho1.jpeg": (0, 5.19),
-    "proliferate1.jpeg": (0, 5.42),
-    "severe1.jpeg": (0, 4.62),
-    "wet1.jpeg": (0, 3.55)
-}
-for filename in image_files:
-    path = f"Original_Images/{filename}"
-    rgb, gray = load_grayscale_and_color(path)
-
-    # Get precomputed optimal threshold and EME
-    best_t, best_eme = optimal_thresholds[filename]
-
-    # Student 2's processing
-    enhanced_img = student2_pipeline(rgb, best_t)
-
-    # Visualization
-    plt.figure(figsize=(15, 5))
-
-    plt.subplot(1, 3, 1)
-    plt.imshow(rgb)
-    plt.title(f'Original: {filename}')
-    plt.axis('off')
-
-    plt.subplot(1, 3, 2)
-    plt.imshow(piecewise_linear_stretch(gray, best_t), cmap='gray')
-    plt.title(f'Student 1 (t={best_t})')
-    plt.axis('off')
-
-    plt.subplot(1, 3, 3)
-    plt.imshow(enhanced_img, cmap='gray')
-    plt.title('Student 2 Enhanced')
-    plt.axis('off')
-
-    plt.tight_layout()
-    plt.show()
-
-    print(f">>> {filename}: Optimal Threshold = {best_t}, Max EME = {round(best_eme, 2)}\n")
+if __name__ == "__main__":
+    # Precomputed optimal thresholds and EMEs (from Student 1)
+    optimal_thresholds = {
+        "cataract1.jpeg": (127, 2.76),
+        "dry1.jpeg": (122, 5.55),
+        "hyper1.jpeg": (147, 6.71),
+        "mild1.jpeg": (128, 6.14),
+        "moderate1.jpeg": (128, 4.55),
+        "norm1.jpeg": (127, 11.02),
+        "patho1.jpeg": (128, 5.25),
+        "proliferate1.jpeg": (121, 5.47),
+        "severe1.jpeg": (122, 4.68),
+        "wet1.jpeg": (110, 3.59)
+    }
+    for filename in image_files:
+        path = f"Original_Images/{filename}"
+        rgb, gray = load_grayscale_and_color(path)
+    
+        # Get precomputed optimal threshold and EME
+        best_t, best_eme = optimal_thresholds[filename]
+    
+        # Student 2's processing
+        enhanced_img = student2_pipeline(rgb, best_t)
+    
+        # Visualization
+        plt.figure(figsize=(15, 5))
+    
+        plt.subplot(1, 3, 1)
+        plt.imshow(rgb)
+        plt.title(f'Original: {filename}')
+        plt.axis('off')
+    
+        plt.subplot(1, 3, 2)
+        plt.imshow(piecewise_linear_stretch(gray, best_t), cmap='gray')
+        plt.title(f'Student 1 (t={best_t})')
+        plt.axis('off')
+    
+        plt.subplot(1, 3, 3)
+        plt.imshow(enhanced_img, cmap='gray')
+        plt.title('Student 2 Enhanced')
+        plt.axis('off')
+    
+        plt.tight_layout()
+        plt.show()
+    
+        print(f">>> {filename}: Optimal Threshold = {best_t}, Max EME = {round(best_eme, 2)}\n")
