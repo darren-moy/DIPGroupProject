@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 def apply_median_filter(image):
     rows, cols = image.shape
@@ -48,16 +49,16 @@ def local_adaptive_thresholding(image, k = .9, window_size = 7):
     M = 255
     for i in range(rows):
         for j in range(cols):
-            # Define local window bounds (with clamping at edges)
+            # Define the local window around the pixel (ensure the window stays within bounds)
             x_min = max(i - window_size // 2, 0)
             x_max = min(i + window_size // 2 + 1, rows)
             y_min = max(j - window_size // 2, 0)
             y_max = min(j + window_size // 2 + 1, cols)
 
             # Extract local window
-            local_window = preprocessed[x_min:x_max, y_min:y_max]
+            local_window = image[x_min:x_max, y_min:y_max]
 
-            # Calculate local statistics
+            # Calculate local
             local_mean = np.mean(local_window)
             I_max = np.max(local_window)
             I_min = np.min(local_window)
@@ -66,12 +67,14 @@ def local_adaptive_thresholding(image, k = .9, window_size = 7):
             T = k * (local_mean + (I_max - I_min) / M)
 
             # Apply threshold
-            binarized_image[i, j] = 255 if preprocessed[i, j] > T else 0
+            binarized_image[i, j] = 255 if image[i, j] > T else 0
     
     return binarized_image
 
 def calculate_psnr(original, modified, max_pixel):
     mse = np.mean((original - modified) ** 2)
+    if mse == 0:
+        return float('inf')
     psnr = 10 * np.log10((max_pixel ** 2) / mse)
     return psnr
 
@@ -98,30 +101,73 @@ preprocessed = edge_magnitude(preprocessed, sobel_x, sobel_y)
 binarized_image1 = local_adaptive_thresholding(preprocessed, .9)
 pnsr1 = calculate_psnr(image, binarized_image1, 255)
 
-binarized_image2 = local_adaptive_thresholding(preprocessed, .8)
+binarized_image2 = local_adaptive_thresholding(preprocessed, .5)
 pnsr2 = calculate_psnr(image, binarized_image2, 255)
 
 
-binarized_image3 = local_adaptive_thresholding(preprocessed, .7)
+binarized_image3 = local_adaptive_thresholding(preprocessed, .1)
 
 
-# Display
+# Different K
 plt.figure(figsize=(12, 4))
 
-plt.subplot(1, 3, 1)
+plt.subplot(1, 4, 1)
+plt.imshow(image, cmap='gray')
+plt.title('Original')
+plt.axis('off')
+
+plt.subplot(1, 4, 2)
 plt.imshow(binarized_image1, cmap='gray')
 plt.title('k = 0.9')
 plt.axis('off')
 
-plt.subplot(1, 3, 2)
+plt.subplot(1, 4, 3)
 plt.imshow(binarized_image2, cmap='gray')
-plt.title('k = 0.8')
+plt.title('k = 0.5')
 plt.axis('off')
 
-plt.subplot(1, 3, 3)
+plt.subplot(1, 4, 4)
 plt.imshow(binarized_image3, cmap='gray')
-plt.title('k = 0.7')
+plt.title('k = 0.1')
 plt.axis('off')
 
 plt.tight_layout()
 plt.show()
+
+for filename in image_files:
+    path = f"Original_Images/{filename}"
+    if not os.path.exists(path):
+        print(f"Image not found: {path}")
+        continue
+
+    image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+
+    preprocessed = apply_median_filter(image)
+    preprocessed = linearContrastStretching(preprocessed)
+    preprocessed = edge_magnitude(preprocessed, sobel_x, sobel_y)
+
+    k = .1
+    binarized_image = local_adaptive_thresholding(preprocessed, k)
+    plt.figure(figsize=(12, 4))
+
+    plt.subplot(1, 3, 1)
+    plt.imshow(image, cmap='gray')
+    plt.title(f'{filename} Original')
+    plt.axis('off')
+
+    plt.subplot(1, 3, 2)
+    plt.imshow(preprocessed, cmap='gray')
+    plt.title(f'{filename} Preprocessed')
+    plt.axis('off')
+
+    plt.subplot(1, 3, 3)
+    plt.imshow(binarized_image, cmap='gray')
+    plt.title(f'{filename} k = {k}')
+    plt.axis('off')
+
+    plt.tight_layout()
+    plt.show()
+
+    psnr = calculate_psnr(image, binarized_image, 255)
+    print(f'{filename}: k = {k}, PSNR = {psnr : .2f}')
+
