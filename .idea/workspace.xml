@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0179e95d-b2c3-4df5-908c-1d7cffa6fe21" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/DIPGroupProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DIPGroupProject.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Zhi.py" beforeDir="false" afterPath="$PROJECT_DIR$/Zhi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Original_Images/Zhi2.py" beforeDir="false" afterPath="$PROJECT_DIR$/Part2Student3.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +22,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "zhirongfu"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/darren-moy/DIPGroupProject.git",
+    "accountId": "240ca7b5-32a1-428c-b363-4e1dc19ba884"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -34,6 +44,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.Part2Student3.executor": "Run",
     "Python.Zhi.executor": "Run",
     "Python.Zhi2.executor": "Run",
     "Python.darren.executor": "Run",
@@ -44,6 +55,11 @@
     "last_opened_file_path": "C:/Users/zhiro/PycharmProjects/PythonProject"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\zhiro\Desktop\DIPGroupProject" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
