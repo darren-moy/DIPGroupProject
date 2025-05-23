@@ -20,12 +20,12 @@ def normalize_channels(rgb_img):
     return np.stack([r_norm, g_norm, b_norm], axis=2)
 
 
-def gamma_correction(image, gamma=1.0):
+def gamma_correction(image, gamma=.7):
     """Apply gamma correction to image"""
     return exposure.adjust_gamma(image, gamma)
 
 
-def alpha_blend(img1, img2, alpha=0.5):
+def alpha_blend(img1, img2, alpha=0.45):
     """Alpha blend two images"""
     return alpha * img1 + (1 - alpha) * img2
 
@@ -43,7 +43,7 @@ def student2_pipeline(rgb_img, optimal_t):
     gamma_img = gamma_correction(diff_img, gamma=0.5)
 
     # Step 4: Alpha blend the grayscale and gamma corrected image
-    blended_img = alpha_blend(gray_img / 255, gamma_img, alpha=0.7)
+    blended_img = alpha_blend(gray_img / 255, gamma_img, alpha=0.5)
     blended_img = (blended_img * 255).astype(np.uint8)
 
     # Step 5: Apply optimal piecewise contrast enhancement
