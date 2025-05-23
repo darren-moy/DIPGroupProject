@@ -99,11 +99,8 @@ preprocessed = linearContrastStretching(preprocessed)
 preprocessed = edge_magnitude(preprocessed, sobel_x, sobel_y)
 
 binarized_image1 = local_adaptive_thresholding(preprocessed, .9)
-pnsr1 = calculate_psnr(image, binarized_image1, 255)
 
 binarized_image2 = local_adaptive_thresholding(preprocessed, .5)
-pnsr2 = calculate_psnr(image, binarized_image2, 255)
-
 
 binarized_image3 = local_adaptive_thresholding(preprocessed, .1)
 
@@ -146,7 +143,7 @@ for filename in image_files:
     preprocessed = linearContrastStretching(preprocessed)
     preprocessed = edge_magnitude(preprocessed, sobel_x, sobel_y)
 
-    k = .1
+    k = .9
     binarized_image = local_adaptive_thresholding(preprocessed, k)
     plt.figure(figsize=(12, 4))
 
