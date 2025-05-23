@@ -4,7 +4,7 @@ from darren import image_files, load_grayscale_and_color
 from Zhi import student2_pipeline
 
 # Enhancement Measure Estimation (EME)
-def compute_EME(img, k1=8, k2=8):
+def compute_EME(img, k1=4, k2=16):
     rows, cols = img.shape
     blockRows = rows // k1
     blockCols = cols // k2
@@ -29,7 +29,7 @@ def compute_EME(img, k1=8, k2=8):
             
             # Avoid Division by 0
             if minVal == 0:
-                continue
+                minVal = 1
             eme += 20 * np.log(maxVal / minVal)
     
     return eme / (k1 * k2)
